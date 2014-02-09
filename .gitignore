@@ -5,6 +5,10 @@ dataset-reviews.txt
 dataset-users.txt
 dataset-taggedReviews.txt
 dataset-testReviews.txt
+dataset-testreviewstext.txt
+dataset-learnreviews.txt
+dataset-learntags.txt
+dataset-newlyTaggedReviews.txt
 yelp_phoenix_academic_dataset.txt
 yelp_phoenix_academic_dataset_reencoded.txt
 

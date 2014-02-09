@@ -1,6 +1,7 @@
 import re
 import yelpdataset_model
 import yelpdataset_tagByStatisticalSignificance
+import sklearn
 from sklearn import svm
 
 
@@ -68,6 +69,41 @@ def printDictOutput(filename, aDict):
         theOutput.write("" + review.funny + "|")
         theOutput.write("" + review.date + "\n")
 
+# print the dictionary as new lines of review text in one file and new lines of tags in another
+def printTagAndReviewTextOutput(reviewFilename, tagFilename, aDict):
+    reviewOutput = open(reviewFilename, 'w')
+    tagOutput = open(tagFilename, 'w')
+
+    for review in aDict.values():
+        reviewOutput.write("" + review.text + "\n")
+        tagOutput.write("" + review.tag + "\n")
+
+# print the dictionary review text
+def printReviewTextOutput(filename, aDict):
+    theOutput = open(filename, 'w')
+
+    for review in aDict.values():
+        theOutput.write("" + review.text + "\n")
+
+# print the dictionary review text
+def printReviewTextOutput(filename, aDict):
+    theOutput = open(filename, 'w')
+
+    for review in aDict.values():
+        theOutput.write("" + review.text + "\n")
+
+# create the tagged dataset as reviews in one file and tags in another
+def createFileTagAndTestDatasets():
+    reviewOutput = "dataset-learnreviews.txt"
+    tagOutput = "dataset-learntags.txt"
+    testOutput = "dataset-testreviewtext.txt"
+
+    data = parse_reviews('dataset-reviews.txt') # parse the review txt into dictionaries of review objects
+    taggedDict, testDict = yelpdataset_tagByStatisticalSignificance.tagStatisticalSignificance(data) # get the test data and the tagged data
+    
+    printTagAndReviewTextOutput(reviewOutput, tagOutput, taggedDict) #print to file
+    printReviewTextOutput(testOutput, testDict)
+
 # create the tagged dataset and the test dataset (as new text files to parse)
 def createTagAndTestDatasets():
     taggedOutput = "dataset-taggedReviews.txt" #filepath for tagged output
@@ -83,27 +119,28 @@ def createTagAndTestDatasets():
 def fitAndPredict():
     newlyTaggedOutput = "dataset-newlyTaggedReviews.txt" #filepath for newly tagged output (which the svm fits)
     
-    data = parse_reviews('dataset-taggedReviews.txt') # parse the tagged review txt into dictionaries of review objects
+    #data = parse_reviews('dataset-taggedReviews.txt') # parse the tagged review txt into dictionaries of review objects
     tagList = [] # list of tags to fit the data to
-    for review in data.values():
-        tagList.append(review.tag)
+    with open("dataset-learntags.txt", 'r') as f:
+        for line in f:
+            tagList.append(line)
 
-    list2D = yelpdataset_model.dictionaryMain(data) # create 2D array
-    classifier = svm.SVC() # create classifer to learn to classify things
+    list2D = yelpdataset_model.dictionaryMain("dataset-learnreviews.txt") # create 2D array
+    classifier = sklearn.svm.LinearSVC() # create classifer to learn to classify things
     classifier.fit(list2D, tagList) # fit the 2D array to the tagList (learn)
 
-    newData = parse_reviews('dataset-testReviews.txt') # parse the test review txt into dictionaries of review objects
-    newList2D = yelpdataset_model.dictionaryMain(newData) # create new 2D array
+    newData = parse_reviews("dataset-testReviews.txt") # to output as dict BCP
+    newList2D = yelpdataset_model.dictionaryMain("dataset-testreviewtext.txt") # create new 2D array
     newTagList = classifier.predict(newList2D) # predict the new tags
 
     # change tags in the newData dictionary
     count = 0
     for review in newData.values():
-        review.tag = newTagList[count]
+        review.tag = newTagList[count].replace('\n',"")
         count += 1
 
     #output dataset
-    printDictOutput(newlyTaggedOutput)
+    printDictOutput(newlyTaggedOutput, newData)
 
 
 if __name__ == '__main__':
