@@ -1,0 +1,19 @@
+# Too big, compress these #
+###########################
+dataset-business.txt
+dataset-reviews.txt
+dataset-users.txt
+yelp_phoenix_academic_dataset.txt
+yelp_phoenix_academic_dataset_reencoded.txt
+
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
