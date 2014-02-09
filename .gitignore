@@ -4,6 +4,7 @@ dataset-business.txt
 dataset-reviews.txt
 dataset-users.txt
 dataset-taggedReviews.txt
+dataset-testReviews.txt
 yelp_phoenix_academic_dataset.txt
 yelp_phoenix_academic_dataset_reencoded.txt
 
