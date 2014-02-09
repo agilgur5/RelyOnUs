@@ -15,7 +15,7 @@ def tagStatisticalSignificance(adict):
   for review_id, review in adict.items():
     if reviewCount <= reviewLimit:
       reviewCount += 1
-      totalUseful += review.useful
+      totalUseful += int(review.useful)
       taggedDict[review_id] = review
     else:
       testDict[review_id] = review
@@ -34,10 +34,10 @@ def tagStatisticalSignificance(adict):
   # tag the reviews if their useful rating is statistically significant
   for review in taggedDict.values(): 
     reviewZScore = (float(review.useful) - sampleMean) / sampleStandardDeviation # calculate z-score
-    if reviewZScore > ZSCORE # rating is above the confidence interval
-      review.tag = 1
-    elif reviewZScore < (float(-1) * ZSCORE) #rating is below the confidence interval
-      review.tag = 0
+    if reviewZScore > ZSCORE: # rating is above the confidence interval
+      review.tag = "1"
+    elif reviewZScore < (float(-1) * ZSCORE): #rating is below the confidence interval
+      review.tag = "0"
   
   return taggedDict, testDict #return the fully tagged dictionary and the test dictionary
 
