@@ -1,5 +1,7 @@
 import json
 
+# Also need to remove \u2122, \u20ac, \xae from reviews
+# Also need to replace \xe3, \xc0 with a, \u0153 with o, \xcc with i, \xda with u, \xc1 with a, \xd3 with o from reviews
 datasetFilepath = "yelp_phoenix_academic_dataset_reencoded.txt"  #yelp dataset with all unix encoding and check ins removed
 #startLine = 1314 #first review/business/user in file
 
@@ -49,7 +51,7 @@ with open(datasetFilepath, 'r') as text:
       reviewDataset.write("review|")
       reviewDataset.write("" + adict['user_id'] + adict['business_id'] + "|") #review_id = user_idbusiness_id
       reviewDataset.write("?|") #tag position
-      reviewDataset.write("" + adict['text'].replace("\n","") + "|")
+      reviewDataset.write("" + adict['text'].replace("\n"," ") + "|")
       reviewDataset.write("" + adict['user_id'] + "|")
       reviewDataset.write("" + adict['business_id'] + "|")
       reviewDataset.write("" + str(adict['stars']) + "|")
