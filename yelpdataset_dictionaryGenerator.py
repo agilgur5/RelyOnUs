@@ -1,5 +1,6 @@
 import re
-import yelpdataset_nGramModel
+import yelpdataset_model
+import yelpdataset_tagByStatisticalSignificance
 
 
 
@@ -49,10 +50,38 @@ def parse_reviews(filename):
             reviews[review_id] = Review(thetype, review_id, tag, text, user_id, business_id, stars, useful, cool, funny, date)
     return reviews
 
+# print the tagged output to a certain file
+def printTaggedOutput(filename, taggedDict):
+    taggedOuput = open(filename, 'w')
+
+    for review in taggedDict
+        taggedOutput.write("review|")
+        taggedOutput.write("" + review.user_id + review.business_id + "|") #review_id = user_idbusiness_id
+        taggedOutput.write("?|") #tag position
+        taggedOutput.write("" + review.text + "|")
+        taggedOutput.write("" + review.user_id + "|")
+        taggedOutput.write("" + review.business_id + "|")
+        taggedOutput.write("" + str(review.stars) + "|")
+        taggedOutput.write("" + str(review.useful) + "|")
+        taggedOutput.write("" + str(review.cool) + "|")
+        taggedOutput.write("" + str(review.funny) + "|")
+        taggedOutput.write("" + review.date + "\n")
+
+# create the tagged dataset and the test dataset (as new text files to parse)
+def createTagAndTestDatasets():
+    taggedOuput = "dataset-taggedReviews.txt" #filepath for tagged output
+    newlyTaggedOutput = "dataset-newlyTaggedReviews.txt" #filepath for newly tagged output (which the svm fits)
+    testOutput = "dataset-testReviews.txt" #filepath for reviews to be tested
+    
+    data = parse_reviews('dataset-reviews.txt') # parse the review txt into dictionaries of review objects
+    taggedDict, testDict = yelpdataset_tagByStatisticalSignificance.tagStatisticalSignificance(data) # get the test data and the tagged data
+    
+    printTaggedOutput(taggedOutput, taggedDict) #print to file
+    printTaggedOutput(testOutput, testDict)
 
 if __name__ == '__main__':
-    data = parse_reviews('dataset-reviews.txt')
-    yelpdataset_nGramModel.dictionaryMain(data)
+    createTagAndTestDatasets()
+    
     #for review in data.values():
      #   print("thetype: %s review_id: %s tag: %s text: %s user_id: %s business_id: %s stars: %s useful: %s cool: %s funny: %s date: %s" % (review.thetype, review.review_id, review.tag, review.text, review.user_id, review.business_id, review.stars, review.useful, review.cool, review.funny, review.date))
 
